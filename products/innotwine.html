@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+
+	<!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="../materialize/css/materialize.css"  media="screen,projection"/>
+
+    <!--Import .css for three.js banner-->
+    <link rel="stylesheet" type="text/css" href="../innotwind-banner/css/base.css" />
+	<link rel="stylesheet" type="text/css" href="../innotwind-banner/css/demo1.css" />
+	<link rel="stylesheet" type="text/css" href="../innotwind-banner/pater/pater.css" />
+
+	<style>
+		body{
+			font-family: 'Roboto', sans-serif;
+		}
+	</style>
+
+    <!--Let browser know website is optimized for mobile-->
+   	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+   	<!--Init for three.js banner-->
+  	<script>document.documentElement.className="js";
+  		var supportsCssVars=function(){
+  			var e,
+  			t=document.createElement("style");
+  			return t.innerHTML="root: { --tmp-var: bold; }",
+  			document.head.appendChild(t),
+  			e=!!(window.CSS&&window.CSS.supports&&window.CSS.supports("font-weight","var(--tmp-var)")),
+  			t.parentNode.removeChild(t),e};
+
+  		supportsCssVars()||alert("Please view this site in a modern browser that supports CSS Variables.");
+  	</script>
+
+  	<!-- Load the Paper.js library -->
+	<script type="text/javascript" src="../js/paper-full.min.js"></script>
+	<!-- Load external PaperScript and associate it with myCanvas -->
+	<script type="text/paperscript" src="../js/promo-analyze.js" canvas="promo-analyze-canvas"></script>
+	<script type="text/paperscript" src="../js/promo-filter.js" canvas="promo-filter-canvas"></script>
+	<script type="text/paperscript" src="../js/promo-connect.js" canvas="promo-connect-canvas"></script>
+	<!-- Mobile redirect script by https://pagecrafter.com -->
+	<script type="text/javascript" src="../js/redirection-mobile.js"></script>
+	<script type="text/javascript">
+		SA.redirection_mobile ({
+	 		mobile_url : "/products/innotwine_mobile.html",
+			tablet_redirection: "true",
+			tablet_host: "/products/innotwine_mobile.html",
+	 	});
+	</script>
+
+	
+
+
+</head>
+<body>
+
+	<!--Preloading-->
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function(){
+			$('.preloader-background').delay(1700).fadeOut('slow');
+			
+			$('.preloader-wrapper')
+				.delay(1700)
+				.fadeOut();
+		});
+	</script>
+	<!--Import jQuery before materialize.js-->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+      <script type="text/javascript" src="../materialize/js/materialize.js"></script>
+	
+    <div class="preloader-background">
+		<div class="preloader-wrapper big active">
+			<div class="spinner-layer spinner-teal-only">
+				<div class="circle-clipper left">
+					<div class="circle"></div>
+				</div>
+				<div class="gap-patch">
+					<div class="circle"></div>
+				</div>
+				<div class="circle-clipper right">
+					<div class="circle"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+	<!-- Nav Bar with Drop Down Menu -->
+	<ul id="dropdown1" class="dropdown-content">
+		<li><a href="/products/innotwine.html">innotwine</a></li>
+		<li><a href="#!">Coming Soon</a></li>
+	</ul>
+	<nav>
+	  <div class="nav-wrapper">
+	    <a href="/index.html" class="brand-logo"><img border="0" alt="Innosol" src="../img/innosol-logo_53x144.png" width="164" height="73"></a>
+	    <a href="index.html" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+	    <ul class="right hide-on-med-and-down">
+	    	<li><a href="/about.html">About</a></li>
+	    	<li><a href="/connect.html">Connect</a></li>
+	    	<li><a href="https://app.innosolpro.com:9001/login">Client Login</a></li>
+	    	<!-- Dropdown Trigger -->
+	    	<li><a class="dropdown-button" href="#!" data-activates="dropdown1">Products<i class="material-icons right">arrow_drop_down</i></a></li>
+	    </ul>
+		<ul class="side-nav" id="mobile-demo">
+	        <li><a href="/about.html">About</a></li>
+	    	<li><a href="/connect.html">Connect</a></li>
+	    	<li><a href="https://app.innosolpro.com:9001/login">Client Login</a></li>
+	        <li><a href="/products/innotwine.html">innotwine</a></li>
+      </ul>
+	  </div>
+	</nav>
+
+
+
+
+
+
+
+
+	<main>
+
+
+		<!-- Unique banner div to support three.js background rendering -->
+		<div class="row">
+		<div class="content">
+			<canvas class="scene scene--full" id="scene"></canvas>
+			<script type="x-shader/x-vertex" id="wrapVertexShader">
+				attribute float size;
+				attribute vec3 color;
+				varying vec3 vColor;
+				void main() {
+					vColor = color;
+					vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+					gl_PointSize = size * ( 350.0 / - mvPosition.z );
+					gl_Position = projectionMatrix * mvPosition;
+				}
+			</script>
+			<script type="x-shader/x-fragment" id="wrapFragmentShader">
+				varying vec3 vColor;
+				uniform sampler2D texture;
+				void main(){
+					vec4 textureColor = texture2D( texture, gl_PointCoord );
+					if ( textureColor.a < 0.3 ) discard;
+					vec4 color = vec4(vColor.xyz, 1.0) * textureColor;
+					gl_FragColor = color;
+				}
+			</script>
+			<div class="content__inner">
+				 <img class="image-inner" src="../innotwind-banner/img/innotwind-logo.png" alt="innotwine" width="100%"> 
+			</div>
+		</div>
+
+	
+		<!-- Promo Section -->
+
+		<div class="row teal accent-4">
+			<br>
+			<div class="col s12 m8 offset-m2 l8 offset-l2 center">
+				<br>
+		    			<h1 class="light center grey-text text-lighten-4">
+		    				Innosol's innotwine is a robust, industry leading, people-data analytics plaform, empowering alumni fundraising professionals to:
+		    				<br>
+		    				<br>
+	    				</h1>
+
+			</div>
+		</div>
+
+		
+		<div class="row teal accent-4">
+			<div class="container" >
+		    	<div class="col s12 m4 l4">
+		    		<div class="center promo promo-base">
+		    			<canvas id="promo-filter-canvas" class="canvas-invisible-cursor" align="center" height="175" width="175" resize="false"></canvas>
+		    			<p class="promo-caption">Search & Filter</p>
+		    			<p class="light center grey-text text-lighten-4">
+		    				Instantly search and filter millions of alumni and non-alumni consituents according to any number of criteria; gone are the days of database joins. Now everthing is connected.
+		    			</p>
+		    		</div>
+		    	</div>
+		      	<div class="col s12 m4 l4">
+		    		<div class="center promo promo-base">
+		    			<canvas id="promo-analyze-canvas" class="canvas-invisible-cursor" align="center" height="175" width="175" resize="false"></canvas>
+		    			<p class="promo-caption">Analyze</p>
+		    			<p class="light center grey-text text-lighten-4">
+		    				Run industry leading ranking algorithms, realtime recommendation generation, and machine learning for on-the-fly brainstorming, on-the-go planning, and on-the-ground intelligence gathering. 
+		    			</p>
+		    		</div>
+		    	</div>
+		    	<div class="col s12 m4 l4">
+		    		<div class="center promo promo-base">
+		    			<canvas id="promo-connect-canvas" class="canvas-invisible-cursor" align="center" height="175" width="175" resize="false"></canvas>
+		    			<p class="promo-caption">Connect</p>
+		    			<p class="light center grey-text text-lighten-4">
+		    				Overlay deep-discovery social media data on existing alumni data, revealing influencers for targeted-marketing and powering an introduction finder to eliminate cold-calling forever.
+		    				<br>
+		    				<br>
+		    				<br>
+		    				<br>
+		    			</p>
+		    		</div>
+	    		</div>
+    		</div>
+    	</div>
+
+    	
+<!--    	
+    	<div class="row divider-scuba-to-dkblue ">
+    		<div class="center col s12 m12 l12" >
+    		<a class="waves-effect waves-light btn-large teal">OLD HABBITS</a>
+    	</div>
+    	</div>
+-->
+
+
+	    <div class="row innosol-blue-dk center">
+	    	<div class="container">
+		    	<div class="col s12 m12 l6">
+		    		<img src="../img/spreadsheet-death.gif" class="responsive-img">
+		    	</div>
+		    	<div class="col s12 m12 l6">
+		    		<div class="col s10 offset-s1 m8 offset-m2 l8 offset-l2">
+			    		<div class="center promo promo-base">
+			    			<br>
+			    			<br>
+			    			<br>
+			    			<br>
+			    			<br>
+			    			<p class="promo-caption">Rows and Columns</p>
+			    			<br>
+			    			<p class="light center grey-text text-lighten-4">
+			    				This is how most of us were trained to look at data—row after row, column after column, day after day. But data doesn't really look like this, and neither do  your alumni. We all know that people are so much more than columns of data.
+			    			</p>
+			    		</div>
+			    	</div>
+		    	</div>
+	    	</div>
+	    </div>
+
+
+<!--
+	    <div class="row divider-dkblue-to-dkgray ">
+    		<div class="center col s12 m12 l12" >
+    		<a class="waves-effect waves-light btn-large teal">THE REALITY</a>
+    	</div>
+    	</div>
+-->
+
+
+	    <div class="row blue-grey darken-3 center">
+	    	<div class="container">
+		    	<div class="col s12 m12 l6">
+		    		<div class="col s10 offset-s1 m8 offset-m2 l8 offset-l2">
+			    		<div class="center promo promo-base">
+			    			<br>
+			    			<br>
+			    			<br>
+			    			<br>
+			    			<p class="promo-caption">Everything is Connected</p>
+			    			<br>
+			    			<p class="light center grey-text text-lighten-4">
+			    				Sitting in your data right now, just behind the veil of tables and spreadsheets are literally millions of explicit and implicit connections, each of which tells an important alumni story and provides valuable insights into their thoughts, patterns, passions, and hopes—the stuff fundraising is made of.
+			    			</p>
+			    		</div>
+			    	</div>
+		    	</div>
+		    	<div class="col s12 m12 l6">
+		    		<img src="../img/everything-connected.gif" class="responsive-img">
+		    	</div>
+	    	</div>
+	    </div>
+
+
+
+	    <div class="row innosol-blue-dk center">
+	    	<div class="container">
+		    	<div class="col s12 m12 l6">
+		    		<br>
+			    	<br>
+		    		<img src="../img/table-graph-chart.gif" class="responsive-img">
+		    	</div>
+		    	<div class="col s12 m12 l6">
+		    		<div class="col s10 offset-s1 m8 offset-m2 l8 offset-l2">
+			    		<div class="center promo promo-base">
+			    			<br>
+			    			<br>
+			    			<br>
+			    			<br>
+			    			<br>
+			    			<br>
+			    			<p class="promo-caption">See Things As They Are</p>
+			    			<br>
+			    			<p class="light center grey-text text-lighten-4">
+			    				What if you could break out of rows and columns and begin visualizing, utilizing, and interacting with your alumni data in more natural and intuitive ways? What if you could see the patterns emerge right before your eyes? What if you could understand what is important to your alumni at a glance?
+			    			</p>
+			    		</div>
+			    	</div>
+		    	</div>
+	    	</div>
+	    </div>
+        
+
+        <div class="row">
+			<br>
+			<div class="col s12 m8 offset-m2 l8 offset-l2 center">
+				<br>
+    			<h1 class="light center grey-text text-darken-4">
+    				Now you can with Innosol's innotwine! And best of all the process is easy to set up and powerful enough to be game-changing right away! Here's the process:
+    				<br>
+    				<br>
+    				<br>
+				</h1>
+			</div>
+		</div> 
+
+		
+		<div class="row white">
+			<div class="container" >
+				<div class="col s12 m2 l2">
+				</div>
+		    	<div class="col s12 m4 l4">
+		    		<div class="center promo promo-base">
+		    			<img src="../img/discovery-web.gif" class="responsive-img">
+		    			<p class="promo-caption grey-text text-darken-4">Step 1: <br>Discover</p>
+		    			<p class="light center grey-text text-darken-4">
+		    				We partner with you so that we can understand what data you know you have, help you discover data you didn't know you had, and strategize ways for you to get data you didn't even know you wanted.
+		    			</p>
+		    		</div>
+		    	</div>
+		    	
+		      	<div class="col s12 m4 l4">
+		    		<div class="center promo promo-base">
+		    			<img src="../img/acquisition-web.gif" class="responsive-img">
+		    			<p class="promo-caption grey-text text-darken-4">Step 2: <br>Acquire</p>
+		    			<p class="light center grey-text text-darken-4">
+		    				Next we store, organize, and structure your data on a secure cloud node-graph database platform, which is available organization-wide to anyone with the permissions to access it.
+		    			</p>
+		    		</div>
+		    	</div>
+		    	<div class="col s12 m2 l2">
+				</div>
+    		</div>
+    	</div>
+
+		<div class="row white">
+			<div class="container" >
+		    	<div class="col s12 m4 l4">
+		    		<div class="center promo promo-base">
+		    			<img src="../img/overlay-web.gif" class="responsive-img">
+		    			<p class="promo-caption grey-text text-darken-4">Step 3: <br>Overlay</p>
+		    			<p class="light center grey-text text-darken-4">
+		    				Then we use proprietary and existing industry-standard data mining techniques to find and overlay constituent social media accounts and relationships on top of your data.
+		    			</p>
+		    		</div>
+		    	</div>
+		      	<div class="col s12 m4 l4">
+		    		<div class="center promo promo-base">
+		    			<img src="../img/score-web.gif" class="responsive-img">
+		    			<p class="promo-caption grey-text text-darken-4">Step 4: <br>Score</p>
+		    			<p class="light center grey-text text-darken-4">
+		    				Using the power of graph analytics, we score your alumni and non-alumni constituents, exposing—often for the first time—thousands of promising prospect candidates. 
+		    			</p>
+		    		</div>
+		    	</div>
+		    	<div class="col s12 m4 l4">
+		    		<div class="center promo promo-base">
+		    			<img src="../img/report-web.gif" class="responsive-img">
+		    			<p class="promo-caption grey-text text-darken-4">Step 5: <br> Report</p>
+		    			<p class="light center grey-text text-darken-4">
+		    				Using constituent data, social media, and our unique scoring, we generate dozens of useful report templates that update live all the time to get your team moving quickly.
+		    				<br>
+		    				<br>
+		    				<br>
+		    				<br>
+		    			</p>
+		    		</div>
+	    		</div>
+    		</div>
+    	</div>
+
+
+	    <div class="row white">
+			<div class="container" >
+				<div class="col s12 m2 l2">
+				</div>
+		    	<div class="col s12 m4 l4">
+		    		<div class="center promo promo-base">
+		    			<img src="../img/visualize-web.gif" class="responsive-img">
+		    			<p class="promo-caption grey-text text-darken-4">Step 6: <br>Visualize</p>
+		    			<p class="light center grey-text text-darken-4">
+		    				Next we give you complete access to your data, social media connections, and scoring. You can navigate the graph, search and filter, analyze, and build connections.
+		    			</p>
+		    		</div>
+		    	</div>
+		    	
+		      	<div class="col s12 m4 l4">
+		    		<div class="center promo promo-base">
+		    			<img src="../img/customize-web.gif" class="responsive-img">
+		    			<p class="promo-caption grey-text text-darken-4">Step 7: <br>Customize</p>
+		    			<p class="light center grey-text text-darken-4">
+		    				Finally, we provide you with the tools you'll need to build your own queries and analytical tools. What you can do with your data and our platform is only limited by your imagination.
+		    			</p>
+		    		</div>
+		    	</div>
+		    	<div class="col s12 m2 l2">
+				</div>
+    		</div>
+    	</div>
+
+
+		<div class="row teal accent-4">
+			<br>
+			<div class="col s12 m8 offset-m2 l8 offset-l2 center">
+				<br>
+		    			<h1 class="light center grey-text text-lighten-4">
+		    				Ready to see the difference innotwine can make in your organization? Click below to contact an innotwine representative and to say hello to the platform that is revolutionizing the world of fund raising in higher education.
+		    				<br>
+		    				<br>
+		    				<a href="/connect.html" class="waves-effect teal darken-2 waves-light  btn">connect</a>
+		    				<br>
+		    				<br>
+	    				</h1>
+
+			</div>
+		</div>
+
+
+    	<div class="row grey lighten-3">
+			<br>
+			<div class="col s12 m8 offset-m2 l8 offset-l2 center">
+				<br>
+		    			<h1 class="light center grey-text text-darken-4">
+		    				Here's what our customers are saying about Innosol's innotwine.
+		    				<br>
+		    				<br>
+		    				<br>
+	    				</h1>
+			</div>
+		</div> 
+
+		<div class="row grey lighten-3 center">
+	    	<div class="container">
+		    	<div class="col s12 m12 l6">
+		    		<div class="col s10 offset-s1 m8 offset-m2 l12">
+			    		<div class="center promo promo-base">
+			    			<img src="../img/ku-logo.gif" class="responsive-img">
+			    			<br>
+			    			<p class="light center grey-text text-darken-4">
+			    				“INNOSOL’s ability to identify invisible or overlooked connections between alumni by combining internal data with enriched social media connections in a cutting-edge database structure may easily become the 'next big thing' in our industry.”
+			    				<br>
+			    				<br>
+			    				Bill Green<br>
+			    				Senior Vice President of Endowment Information Sciences, 
+			    				Kansas University
+			    			</p>
+			    		</div>
+			    	</div>
+		    	</div>
+		    	<div class="col s12 m12 l6">
+		    		<div class="col s10 offset-s1 m8 offset-m2 l12">
+			    		<div class="center promo promo-base">
+			    			<img src="../img/ucm-logo.gif" class="responsive-img">
+		    				<br>
+			    			<p class="light center grey-text text-darken-4">
+			    				"The innotwine product is a revolutionary advancement in the process of alumni prospect research and management. For the first time we can overlay social media data with data in our own system to identify leaders in peer groups and influencers in their networks. The ability to see all of this data at once has reduced hours of research while allowing previously unknown doors to be opened with potential donors and leaders within our network. We are using the tool to facilitate prospecting for major gift fundraising and boost alumni engagement through volunteer recruitment initiatives. The innotwine tool is making all of this and much more possible."
+			    				<br>
+			    				<br>
+			    				Jenne L. Vanderbout <br>
+    							Assistant Vice President for Alumni & Development, University of Central Missouri
+
+			    			</p>
+			    		</div>
+			    	</div>
+		    	</div>
+	    	</div>
+	    </div>
+
+
+	</main>
+	<script src="../innotwind-banner/js/demo.js"></script>
+	<script src="../innotwind-banner/js/three.min.js"></script>
+	<script src="../innotwind-banner/js/TweenMax.min.js"></script>
+	<script src="../innotwind-banner/js/demo1.js"></script>
+
+
+
+<!-- FOOTER -->
+
+
+	<footer class="page-footer">
+
+			<div class="row">
+	          	<div class="col l3 m3 s6">
+	          		<img src="../img/innosol-logo_dk_53x144.png" class="responsive-img">
+		            <p class="thin grey-text text-lighten-2"><small>Powered by passion.</small>
+		            </p>
+	          	</div>
+	          	<div class="col l3 m3 s6">
+	      			<p class="light grey-text text-lighten-2">ABOUT</p>
+		            <p class="thin grey-text text-lighten-2"><small>Innosol is a graph analytics <br>and technology company <br>dedicated to making the world <br>a more connected place.</small>
+		            </p>
+	          	</div>
+	          	<div class="col l3 m3 s6">
+	      			<p class="light grey-text text-lighten-2">CONTACT</p><small>
+	      			<a class="thin grey-text text-lighten-2" href="mailto:info@innosolpro.com">info@innosolpro.com</a><br>
+	      			<a class="thin grey-text text-lighten-2" href="#">913.484.5414</a><br>
+	      			<a class="thin grey-text text-lighten-2" href="#">Overland Park, Kansas</a><br>
+		            <a class="thin grey-text text-lighten-2" href="http://innosolpro.com">www.innosolpro.com</a></small>
+          		</div>
+	          	<div class="col l3 m3 s6">
+	          		<p class="light grey-text text-lighten-2">CONNECT</p><small>
+		            <a class="thin grey-text text-lighten-2" href="http://facebook.com">facebook</a><br>
+		            <a class="thin grey-text text-lighten-2" href="http://twitter.com">twitter</a><br>
+		            <a class="thin grey-text text-lighten-2" href="http://linkedin.com">linkedIn</a><br></small>
+	          	</div>
+
+        </div>
+        <div class="footer-copyright">
+        	<div class="row">
+        		<p class="light text-left">  <small>© 2018 Copyright Innovative Solutions Professionals, LLC.</p></small>
+        	<div class="row">
+      </div>
+	</footer>
+
+
+
+</body>
+</html>
