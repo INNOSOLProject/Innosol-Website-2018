@@ -17,9 +17,6 @@
 	<link rel="stylesheet" type="text/css" href="/innotwind-banner/css/demo1.css" />
 	<link rel="stylesheet" type="text/css" href="/innotwind-banner/pater/pater.css" />
 
-	<!-- a helper script for vaidating the form-->
-	<script language="JavaScript" src="/js/scripts/gen_validatorv31.js" type="text/javascript"></script>
-
 	<style>
 		body{
 			font-family: 'Roboto', sans-serif;
@@ -127,29 +124,37 @@
 	    </div>
 	    <div class="row">
 			<div class="container">
-			    <form class="col s12" method="POST" name="contactform" action="contact-form-handler.php">
+			    <form class="col s12" method="POST" name="contactform">
 			      <div class="row">
 			      	<br>
 			        <div class="input-field col s6">
-			          <input type="text" name="name">
+			          <input id="form-name" type="text" class="validate" name="name" required>
 			          <label for="name">Name</label>
+                <span class="helper-text" data-error="Please enter your name" data-success=""></span>
 			        </div>
 			      </div>
 			      <div class="row">
 			        <div class="input-field col s12">
-			          <input type="text" name="email">
+			          <input id="form-email" class="validate" type="email" name="email" required>
 			          <label for="email">Email</label>
+                <span class="helper-text" data-error="Please enter your email address" data-success=""></span>
 			        </div>
 			      </div>
 			      <div class="row">
 			        <div class="input-field col s12">
-			        	<textarea name="message" class="materialize-textarea"></textarea>
+			        	<textarea id="form-message" name="message" class="materialize-textarea validate" required></textarea>
 			          <label for="message">Message</label>
+                <span class="helper-text" data-error="Please enter a message" data-success=""></span>
 			          <br><br>
 			        </div>
 			      </div>
 			      <div class="row">
-			        <input class="waves-effect waves-light btn" type="submit" value="Send"><br>
+              <button class="waves-effect waves-light btn" type="button" id="submit">Send</button><br>
+              <div class="error-submitting hidden">
+                Looks like there's a problem with the form submission.
+                <br>
+                <a href="mailto:info@innosolpro.com" class="waves-effect waves-light btn"><i class="material-icons left">email</i>Send an email instead</a>
+              </div>
 			        <br>
 			        <br><br><br>
 			      </div>
@@ -158,10 +163,6 @@
   		</div>
 
   		<script language="JavaScript">
-			var frmvalidator  = new Validator("contactform");
-			frmvalidator.addValidation("name","req","Please provide your name"); 
-			frmvalidator.addValidation("email","req","Please provide your email"); 
-			frmvalidator.addValidation("email","email","Please enter a valid email address"); 
 		</script>
 
 
@@ -228,5 +229,6 @@
       </div>
 	</footer>
 
+  <script type="text/javascript" src="./js/form.js"></script>
 </body>
 </html>
