@@ -1,0 +1,3 @@
+User-agent: Googlebot
+Disallow:
+sitemap: http://innosolpro.com/sitemap.xml
